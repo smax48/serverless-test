@@ -42,10 +42,14 @@ namespace TollBooth
                 // TODO 5: Retrieve a List of LicensePlateDataDocument objects from the collectionLink where the exported value is false.
                 // COMPLETE: licensePlates = _client.CreateDocumentQuery ...
                 // TODO 6: Remove the line below.
-                licensePlates = new List<LicensePlateDataDocument>();
+                // TODO 5: Retrieve a List of LicensePlateDataDocument objects from the collectionLink where the exported value is false.
+                licensePlates = _client.CreateDocumentQuery<LicensePlateDataDocument>(collectionLink,
+                              new FeedOptions() { EnableCrossPartitionQuery = true, MaxItemCount = 100 })
+                          .Where(l => l.exported == false).ToList();
             }
+                // TODO 6: Remove the line below.            }
 
-            exportedCount = licensePlates.Count();
+                exportedCount = licensePlates.Count();
             _log.LogInformation($"{exportedCount} license plates found that are ready for export");
             return licensePlates;
         }
